@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--        SQL映射文件的namespace属性为Mapper接口全限定名-->
+<mapper namespace="com.yixiangxi.usermapper.userMapper">
+
+    <!--    statement-->
+    <select id="selectUserAll" resultType="com.yixiangxi.pojo.User">
+        select *
+        from users;
+    </select>
+
+
+    <select id="selectUserById" parameterType="int" resultType="com.yixiangxi.pojo.User">
+        select *
+        from users
+        where id = #{id};
+    </select>
+    <!--*参数占位符
+        #{}表示一个占位符，不存在SQL注入的问题
+        #{id}中id表示接收输入的参数，参数名称就是id，如果输入参数是简单类型，#{}中的参数名可以任意
+        ${id} 存在sql注入问题
+        *参数类型
+        parameterType=" "可以省略
+        *特殊字符处理
+        例如小于号“<”
+        <![CDATA[ 内容 ]]>
+        或者使用转义字符
+        &lt;
+
+
+    -->
+
+    <!--        <select id="selectUserById" parameterType="int" resultType="com.yixiangxi.pojo.User">-->
+    <!--            select * from users where id &lt; #{id};-->
+    <!--        </select>-->
+
+    <!--        <select id="selectUserById" parameterType="int" resultType="com.yixiangxi.pojo.User">-->
+    <!--            select * from users where id<![CDATA[ < ]]> #{id};-->
+    <!--        </select>-->
+
+
+    <!--多条件查询-->
+
+    <!--    <select id="selectByCondition" resultType="com.yixiangxi.pojo.User">-->
+    <!--        select *-->
+    <!--        from users-->
+    <!--        where name like #{name}-->
+    <!--          and age = #{age};-->
+    <!--    </select>-->
+
+
+    <!--    动态sql查询-->
+    <!--
+        if:条件判断
+        test:判断条件
+        问题：and的多余性，当第一个if判断不生效时sql语句就会报错
+        解决方法：
+        1.使用where标签
+        2.添加一个恒等式例如 1 = 1
+    -->
+    <!--    1.使用where标签-->
+    <select id="selectByCondition" resultType="com.yixiangxi.pojo.User">
+        select *
+        from users
+
+        <where>
+            <if test="name != null and name != '' ">
+                and name like #{name}
+            </if>
+
+            <if test="age !=null and age !=0">and age = #{age};</if>
+        </where>
+
+    </select>
+
+
+    <!--    2.添加一个恒等式例如 1 = 1-->
+    <!--    <select id="selectByCondition" resultType="com.yixiangxi.pojo.User">-->
+    <!--        select *-->
+    <!--        from users-->
+
+    <!--        where 1 = 1-->
+    <!--        <if test="name != null and name != '' ">-->
+    <!--            and name like #{name}-->
+    <!--        </if>-->
+
+    <!--        <if test="age !=null and age !=0">and age = #{age};</if>-->
+
+    <!--    </select>-->
+
+
+    <!--    单条件动态查询-->
+    <!--
+        使用choose标签相当于swich，
+        使用when标签相当于case，
+        使用otherwise标签相当于default
+
+    -->
+    <select id="selectByConditionSingle" resultType="com.yixiangxi.pojo.User">
+        select *
+        from users
+
+        <where>
+            <choose>
+                <when test="name != null and name != '' ">
+                    and name like #{name}
+                </when>
+
+
+                <when test="age !=null and age !=0">
+                    and age = #{age};
+                </when>
+
+                <otherwise>1=1</otherwise>
+            </choose>
+        </where>
+
+    </select>
+
+
+    <!--数据库使用属性名中使用下划线，而在java中使用驼峰命名法，所以需要使用resultMap来映射    -->
+
+    <!--    id 用于主键的映射-->
+    <!--    column 用于数据库表的字段名-->
+    <!--    property 用于javaBean中的属性名-->
+    <!--    -->
+    <!--    <resultMap id="userResultmap" type="com.yixiangxi.pojo.User">-->
+    <!--        <id property="id" column="id"/>-->
+    <!--        <result property="first_name" column="firstName"/>-->
+    <!--    </resultMap>-->
+    <!--    -->
+    <!--    -->
+    <!--    <select id="selectUserAll" resultMap="userResultmap">-->
+    <!--        select * from users;-->
+    <!--    </select>-->
+
+
+</mapper>

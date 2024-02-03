@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+
+<!--    可以设置多个environment 用于切换数据库的源，改变<environments default="development">中的default来更换默认数据源-->
+<!--数据源1    -->
+    <environments default="development">
+
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+
+            <!--            使用spring之后不再在此配置数据源，而是使用spring来配置数据源-->
+            <dataSource type="POOLED">
+<!--                数据库连接信息-->
+                <!--                数据库驱动,${driver}表示动态需要修改-->
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql:///mybatislearning?useSSL=false"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123456"/>
+            </dataSource>
+        </environment>
+
+<!--数据源2-->
+        <environment id="test">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <!--                数据库连接信息-->
+                <!--                数据库驱动,${driver}表示动态需要修改-->
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+
+                <property name="url" value="jdbc:mysql:///mybatislearning?useSSL=false"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123456"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+
+
+
+    <!--引入映射文件-->
+    <mappers>
+        <mapper resource="com/yixiangxi/usermapper/userMapper.xml"/>
+    </mappers>
+
+</configuration>
+
